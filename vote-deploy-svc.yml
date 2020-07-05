@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  labels:
+    app: docker-voting
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: vote-ctr-port
+  selector:
+    app: docker-voting
+    run: vote
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote
+  labels:
+    app: docker-voting
+spec:
+  selector:
+    matchLabels:
+      app: docker-voting
+      run: vote
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 20%
+  template:
+    metadata:
+      labels:
+        app: docker-voting
+        run: vote
+    spec:
+      containers:
+      - image: dockersamples/examplevotingapp_vote:before
+        name: vote-ctr
+        env:
+        - name: OPTION_A
+          value: Big Dogs
+        - name: OPTION_B
+          value: Small Dogs
+        ports:
+        - containerPort: 80
+          name: vote-ctr-port
+        resources:
+          requests:
+            memory: 70Mi
+            cpu: 50m
+          limits:
+            memory: 150Mi
+            cpu: 150m
+        readinessProbe:
+          tcpSocket:
+            port: vote-ctr-port
+          initialDelaySeconds: 1
+          periodSeconds: 10
+          timeoutSeconds: 2
+...
