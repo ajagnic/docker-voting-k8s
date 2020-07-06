@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: docker-voting
+spec:
+  selector:
+    matchLabels:
+      app: docker-voting
+      run: worker
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 20%
+      maxSurge: 20%
+  template:
+    metadata:
+      labels:
+        app: docker-voting
+        run: worker
+    spec:
+      containers:
+      - image: dockersamples/examplevotingapp_worker
+        name: worker-ctr
+        resources:
+          requests:
+            memory:
+            cpu:
+          limits:
+            memory:
+            cpu:
+...
