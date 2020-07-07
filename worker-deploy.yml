@@ -22,13 +22,13 @@ spec:
         run: worker
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: ajagnic/voting_fixed_worker:0.1
         name: worker-ctr
         resources:
           requests:
-            memory:
-            cpu:
+            memory: 25Mi
+            cpu: 50m
           limits:
-            memory:
-            cpu:
+            memory: 100Mi
+            cpu: 150m
 ...

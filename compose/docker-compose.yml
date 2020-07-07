@@ -17,9 +17,12 @@ services:
         condition: on-failure
 
   db:
-    image: postgres:9.4
+    image: postgres:9.6
     volumes:
       - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     networks:
       - backend
     deploy:
@@ -44,7 +47,7 @@ services:
         condition: on-failure
 
   result:
-    image: dockersamples/examplevotingapp_result:before
+    image: result
     ports:
       - "5001:80"
     networks:
@@ -60,7 +63,7 @@ services:
         condition: on-failure
 
   worker:
-    image: dockersamples/examplevotingapp_worker
+    image: worker_java
     networks:
       - frontend
       - backend
