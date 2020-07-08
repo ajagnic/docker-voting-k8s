@@ -39,6 +39,11 @@ spec:
       containers:
       - image: ajagnic/voting_fixed_result:0.1
         name: result-ctr
+        env:
+        - name: OPTION_A
+          value: Big Dogs
+        - name: OPTION_B
+          value: Small Dogs
         ports:
         - containerPort: 80
           name: result-ctr-port
