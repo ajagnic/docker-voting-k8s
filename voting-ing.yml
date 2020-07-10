@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: voting
+  labels:
+    app: docker-voting
+spec:
+  rules:
+  # Set to this host for local testing with DNS resolution
+  - host: voting.127.0.0.1.nip.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: vote
+          servicePort: 8080
+      - path: /result
+        backend:
+          serviceName: result
+          servicePort: 8081
+...
