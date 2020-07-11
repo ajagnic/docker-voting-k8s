@@ -24,7 +24,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: result
-  replicas: 1
+  replicas: 3
   strategy:
     rollingUpdate:
       maxUnavailable: 20%

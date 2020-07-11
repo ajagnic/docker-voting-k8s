@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: worker
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 20%
