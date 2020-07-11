@@ -7,16 +7,18 @@ metadata:
     app: docker-voting
 spec:
   rules:
-  # Set to this host for local testing with DNS resolution
-  - host: voting.127.0.0.1.nip.io
+  - host: vote.127.0.0.1.nip.io
     http:
       paths:
       - path: /
         backend:
           serviceName: vote
-          servicePort: 8080
-      - path: /result
+          servicePort: vote-http
+  - host: result.127.0.0.1.nip.io
+    http:
+      paths:
+      - path: /
         backend:
           serviceName: result
-          servicePort: 8081
+          servicePort: result-http
 ...

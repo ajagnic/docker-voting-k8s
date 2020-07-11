@@ -6,10 +6,9 @@ metadata:
   labels:
     app: docker-voting
 spec:
-  type: LoadBalancer
   ports:
-  - port: 8080
-    targetPort: vote-ctr-port
+  - name: vote-http
+    port: 80
   selector:
     app: docker-voting
     run: vote
@@ -41,9 +40,15 @@ spec:
         name: vote-ctr
         env:
         - name: OPTION_A
-          value: Big Dogs
+          valueFrom:
+            configMapKeyRef:
+              name: voting-env
+              key: option_a
         - name: OPTION_B
-          value: Small Dogs
+          valueFrom:
+            configMapKeyRef:
+              name: voting-env
+              key: option_b
         ports:
         - containerPort: 80
           name: vote-ctr-port

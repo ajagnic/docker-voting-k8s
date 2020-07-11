@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: voting-env
+data:
+  option_a: Big Dogs
+  option_b: Small Dogs
