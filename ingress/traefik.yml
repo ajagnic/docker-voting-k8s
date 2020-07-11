@@ -5,6 +5,19 @@ metadata:
   name: ingress
 ---
 apiVersion: v1
+kind: LimitRange
+metadata:
+  name: ingress-limits
+  namespace: ingress
+spec:
+  limits:
+  - default:
+    min:
+      memory: 500Mi
+      cpu: 500m
+    type: Container
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: traefik
@@ -12,12 +25,30 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: web
+    port: 80
+  selector:
+    app: traefik
+    run: ingress-controller
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-admin
+  namespace: ingress
+spec:
+  type: NodePort
+  ports:
+  - name: admin
+    port: 8080
+  selector:
+    app: traefik
+    run: ingress-controller
 ---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: traefik-ic
+  name: traefik
   namespace: ingress
 spec:
   selector:
@@ -31,11 +62,12 @@ spec:
         run: ingress-controller
     spec:
       serviceAccountName: traefik-sa
-      container:
-      - image: traefik:2.1
+      containers:
+      - image: traefik:1.7
         name: traefik-ctr
         args:
-        - --providers.kubernetesingress=true
+        - --api
+        - --kubernetes
         securityContext:
           capabilities:
             drop:
@@ -85,4 +117,10 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses/status
+  verbs:
+  - update
 ...
