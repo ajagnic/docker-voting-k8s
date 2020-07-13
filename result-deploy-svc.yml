@@ -24,7 +24,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: result
-  replicas: 1
+  replicas: 3
   strategy:
     rollingUpdate:
       maxUnavailable: 20%
@@ -38,6 +38,7 @@ spec:
       containers:
       - image: ajagnic/voting_fixed_result:v1
         name: result-ctr
+        imagePullPolicy: Always
         env:
         - name: OPTION_A
           valueFrom:

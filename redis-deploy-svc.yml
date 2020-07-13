@@ -23,7 +23,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: redis
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 20%
@@ -42,7 +42,7 @@ spec:
             memory: 10Mi
             cpu: 30m
           limits:
-            memory: 100Mi
+            memory: 250Mi
             cpu: 150m
         livenessProbe:
           exec:

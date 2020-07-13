@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: worker
-  replicas: 2
+  replicas: 4
   strategy:
     rollingUpdate:
       maxUnavailable: 20%
@@ -24,6 +24,7 @@ spec:
       containers:
       - image: ajagnic/voting_fixed_worker:v1
         name: worker-ctr
+        imagePullPolicy: Always
         env:
         - name: POSTGRES_USER
           valueFrom:
