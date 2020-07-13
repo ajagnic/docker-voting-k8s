@@ -9,13 +9,13 @@ Adrian Agnic [ [Github](https://github.com/ajagnic) ]
 ## Application Flow
 ![](voting-architecture.png)
 
-#### Images
-- [Traefik](https://hub.docker.com/_/traefik)
-- [Vote](https://hub.docker.com/r/dockersamples/examplevotingapp_vote)
-- [Redis](https://hub.docker.com/_/redis)
-- [Worker](https://hub.docker.com/r/ajagnic/voting_fixed_worker) (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_worker))
-- [Postgres](https://hub.docker.com/_/postgres)
-- [Result](https://hub.docker.com/r/ajagnic/voting_fixed_result) (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_result))
+#### Images and Resource Types
+- [Traefik](https://hub.docker.com/_/traefik) - HTTP reverse-proxy (DaemonSet)
+- [Postgres](https://hub.docker.com/_/postgres) - SQL database (StatefulSet)
+- [Redis](https://hub.docker.com/_/redis) - Key-value data store (Deployment)
+- [Vote](https://hub.docker.com/r/dockersamples/examplevotingapp_vote) - Python Flask web server (Deployment)
+- [Worker](https://hub.docker.com/r/ajagnic/voting_fixed_worker) - Java process (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_worker)) (Deployment)
+- [Result](https://hub.docker.com/r/ajagnic/voting_fixed_result) - Node.js web server (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_result)) (Deployment)
 
 ## Notes
 - Ingress resource uses [nip.io](https://nip.io/) hostnames to simulate DNS resolution without modification of a _hosts_ file.
@@ -94,5 +94,8 @@ __Local Deployment :__
 - Traefik Admin - `http://{CLUSTER-IP}:{NODE-PORT}`
 
 ## Issues
-- Hard-coded SQL connection strings still need to be replaced by environment variables.
 - Redis Deployment cannot be replicated in current version
+- Result Deployment is having issues with replication, possibly due to socket io implementation
+
+## Incoming
+- Adding LetsEncypt functionality to Traefik for HTTPS endpoints
