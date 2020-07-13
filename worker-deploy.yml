@@ -22,8 +22,19 @@ spec:
         run: worker
     spec:
       containers:
-      - image: ajagnic/voting_fixed_worker:0.1
+      - image: ajagnic/voting_fixed_worker:v1
         name: worker-ctr
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-config
+              key: pg-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-config
+              key: pg-pass
         resources:
           requests:
             memory: 25Mi

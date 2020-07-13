@@ -24,7 +24,7 @@ spec:
     matchLabels:
       app: docker-voting
       run: result
-  replicas: 3
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 20%
@@ -36,7 +36,7 @@ spec:
         run: result
     spec:
       containers:
-      - image: ajagnic/voting_fixed_result:0.1
+      - image: ajagnic/voting_fixed_result:v1
         name: result-ctr
         env:
         - name: OPTION_A
@@ -49,6 +49,16 @@ spec:
             configMapKeyRef:
               name: voting-env
               key: option_b
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-config
+              key: pg-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-config
+              key: pg-pass
         ports:
         - containerPort: 80
           name: result-ctr-port
