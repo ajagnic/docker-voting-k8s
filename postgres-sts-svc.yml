@@ -4,25 +4,35 @@ kind: Service
 metadata:
   name: db
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   ports:
   - port: 5432
   selector:
     app: docker-voting
     run: postgres
+    tier: backend
+    env: production
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   selector:
     matchLabels:
       app: docker-voting
       run: postgres
+      tier: backend
+      env: production
   serviceName: db
   volumeClaimTemplates:
   - metadata:
@@ -40,6 +50,8 @@ spec:
       labels:
         app: docker-voting
         run: postgres
+        tier: backend
+        env: production
     spec:
       containers:
       - image: postgres:9.6

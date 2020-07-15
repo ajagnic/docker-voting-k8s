@@ -4,7 +4,10 @@ kind: Service
 metadata:
   name: result
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: result
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   ports:
   - name: result-http
@@ -12,18 +15,25 @@ spec:
   selector:
     app: docker-voting
     run: result
+    tier: frontend
+    env: production
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: result
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: result
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   selector:
     matchLabels:
       app: docker-voting
       run: result
+      tier: frontend
+      env: production
   replicas: 3
   strategy:
     rollingUpdate:
@@ -34,6 +44,8 @@ spec:
       labels:
         app: docker-voting
         run: result
+        tier: frontend
+        env: production
     spec:
       containers:
       - image: ajagnic/voting_fixed_result:v1

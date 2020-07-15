@@ -4,12 +4,17 @@ kind: Deployment
 metadata:
   name: worker
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: worker
+    app.kubernetes.io/component: process
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   selector:
     matchLabels:
       app: docker-voting
       run: worker
+      tier: backend
+      env: production
   replicas: 4
   strategy:
     rollingUpdate:
@@ -20,6 +25,8 @@ spec:
       labels:
         app: docker-voting
         run: worker
+        tier: backend
+        env: production
     spec:
       containers:
       - image: ajagnic/voting_fixed_worker:v1

@@ -95,6 +95,3 @@ __Local URLs :__
 - Vote - `http://vote.127.0.0.1.nip.io`
 - Result - `http://result.127.0.0.1.nip.io`
 - Traefik Admin - `http://{CLUSTER-IP}:{NODE-PORT}`
-
-## Incoming
-- Adding LetsEncypt functionality to Traefik for HTTPS endpoints

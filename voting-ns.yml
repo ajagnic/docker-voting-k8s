@@ -4,5 +4,6 @@ kind: Namespace
 metadata:
   name: voting
   labels:
-    app: docker-voting
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 ...

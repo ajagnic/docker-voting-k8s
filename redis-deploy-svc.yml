@@ -4,25 +4,35 @@ kind: Service
 metadata:
   name: redis
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   ports:
   - port: 6379
   selector:
     app: docker-voting
     run: redis
+    tier: backend
+    env: production
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
   labels:
-    app: docker-voting
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   selector:
     matchLabels:
       app: docker-voting
       run: redis
+      tier: backend
+      env: production
   replicas: 2
   strategy:
     rollingUpdate:
@@ -33,6 +43,8 @@ spec:
       labels:
         app: docker-voting
         run: redis
+        tier: backend
+        env: production
     spec:
       containers:
       - image: redis:6

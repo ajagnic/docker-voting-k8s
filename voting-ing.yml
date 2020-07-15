@@ -4,7 +4,8 @@ kind: Ingress
 metadata:
   name: voting
   labels:
-    app: docker-voting
+    app.kubernetes.io/part-of: docker-voting
+    app.kubernetes.io/version: "1.0.0"
 spec:
   rules:
   - host: vote.127.0.0.1.nip.io
