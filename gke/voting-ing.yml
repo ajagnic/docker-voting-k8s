@@ -2,25 +2,23 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: voting-dev
+  name: voting-prod
   labels:
     app.kubernetes.io/part-of: docker-voting
     app.kubernetes.io/version: "1.0.0"
-    env: development
+    env: production
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "voting-static-ip"
 spec:
   rules:
-  - host: vote.127.0.0.1.nip.io
-    http:
+  - http:
       paths:
-      - path: /
-        backend:
-          serviceName: vote
-          servicePort: vote-http
-  - host: result.127.0.0.1.nip.io
-    http:
-      paths:
-      - path: /
+      - path: /*
         backend:
           serviceName: result
           servicePort: result-http
+      - path: /vote/*
+        backend:
+          serviceName: vote
+          servicePort: vote-http
 ...

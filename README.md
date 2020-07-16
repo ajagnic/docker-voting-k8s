@@ -17,20 +17,21 @@ Adrian Agnic [ [Github](https://github.com/ajagnic) ]
 - [Worker](https://hub.docker.com/r/ajagnic/voting_fixed_worker) - Java process (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_worker))
 - [Result](https://hub.docker.com/r/ajagnic/voting_fixed_result) - Node.js web server (modified version of the original [image](https://hub.docker.com/r/dockersamples/examplevotingapp_result))
 
-## Notes
+## Run ( Local )
+#### Notes
 - Ingress resource uses [nip.io](https://nip.io/) hostnames to simulate DNS resolution without modification of a _hosts_ file.
-
-## Run
-__Note__: This has only been tested as running on a local k8s cluster.
 
 Create the IngressController before starting the application
 ```sh
-kubectl apply -f ingress/traefik.yml
+kubectl apply -f traefik/controller.yml
 ```
 
 Create the application resources under the _voting_ namespace
 ```sh
 kubectl apply -n voting -f .
+```
+```
+kubectl apply -n voting -f local/voting-ing.yml
 ```
 
 Check that all resources were created successfully
@@ -95,3 +96,16 @@ __Local URLs :__
 - Vote - `http://vote.127.0.0.1.nip.io`
 - Result - `http://result.127.0.0.1.nip.io`
 - Traefik Admin - `http://{CLUSTER-IP}:{NODE-PORT}`
+
+## Cleanup
+```sh
+kubectl delete all --all -n ingress
+kubectl delete all --all -n voting
+```
+
+<!-- 
+TODO:
+gcloud compute addresses create voting-static-ip --global
+kubectl delete ingress voting-prod
+gcloud compute addresses delete web-static-ip --global
+ -->
