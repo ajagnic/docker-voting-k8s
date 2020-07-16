@@ -29,8 +29,6 @@ kubectl apply -f traefik/controller.yml
 Create the application resources under the _voting_ namespace
 ```sh
 kubectl apply -n voting -f .
-```
-```
 kubectl apply -n voting -f local/voting-ing.yml
 ```
 
