@@ -50,7 +50,6 @@ spec:
       containers:
       - image: ajagnic/voting_fixed_result:v1
         name: result-ctr
-        imagePullPolicy: Always
         env:
         - name: OPTION_A
           valueFrom:
