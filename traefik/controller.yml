@@ -41,6 +41,7 @@ spec:
   ports:
   - name: admin
     port: 8080
+    nodePort: 30001
   selector:
     app: traefik
     run: ingress-controller
