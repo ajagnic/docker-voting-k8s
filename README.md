@@ -44,7 +44,7 @@ pod/traefik-95khw   1/1     Running   0          9s
 
 NAME                    TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
 service/traefik         LoadBalancer   10.109.124.169   localhost     80:31442/TCP     10s
-service/traefik-admin   NodePort       10.106.11.156    <none>        8080:30582/TCP   9s
+service/traefik-admin   NodePort       10.106.11.156    <none>        8080:30001/TCP   9s
 
 NAME                     DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 daemonset.apps/traefik   1         1         1       1            1           <none>          9s
@@ -91,21 +91,54 @@ NAME                        READY   AGE
 statefulset.apps/postgres   1/1     17s
 ```
 
+## Run ( GKE )
+#### Notes
+- GKE Ingress will create two GCP Load Balancers for each static IP. In actual production, one would register sub-domains and point them to a single IP where Ingress would route based on the host, similiar to the local Ingress file.
+
+Set the `kubectl` context to your GKE cluster
+```sh
+gcloud container clusters get-credentials {CLUSTER-NAME} --zone {ZONE}
+```
+
+Create the global static IP addresses that the Ingress will use
+```sh
+gcloud compute addresses create vote-static-ip --global
+gcloud compute addresses create result-static-ip --global
+```
+
+Create the application resources
+```sh
+kubectl apply -n voting -f .
+kubectl apply -n voting -f gke/voting-ing.yml
+```
+
 ## Use
 __Local URLs :__
 - Vote - `http://vote.127.0.0.1.nip.io`
 - Result - `http://result.127.0.0.1.nip.io`
-- Traefik Admin - `http://{CLUSTER-IP}:{NODE-PORT}`
+- Traefik Admin - `http://{CLUSTER-IP}:30001`
+
+__GKE URLs :__
+- Vote - `http://{vote-static-ip}`
+- Result - `http://{result-static-ip}`
+
 
 ## Cleanup
+#### Local
 ```sh
 kubectl delete all --all -n ingress
 kubectl delete all --all -n voting
+kubectl delete ing/voting -n voting
+```
+#### GKE
+```sh
+kubectl delete all --all -n voting
+kubectl delete ing vote result -n voting
+gcloud compute addresses delete vote-static-ip --global
+gcloud compute addresses delete result-static-ip --global
 ```
 
-<!-- 
-TODO:
-gcloud compute addresses create voting-static-ip --global
-kubectl delete ingress voting-prod
-gcloud compute addresses delete web-static-ip --global
- -->
+Set `kubectl` context back to normally used one
+```sh
+kubectl config use-context {CONTEXT}
+```
