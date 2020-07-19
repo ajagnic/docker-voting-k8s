@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: voting-dev
+  name: voting
   labels:
     app.kubernetes.io/part-of: docker-voting
     app.kubernetes.io/version: "1.0.0"

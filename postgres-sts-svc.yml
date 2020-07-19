@@ -76,7 +76,7 @@ spec:
             cpu: 250m
         volumeMounts:
         - name: pg-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/
         livenessProbe:
           exec:
             command:
